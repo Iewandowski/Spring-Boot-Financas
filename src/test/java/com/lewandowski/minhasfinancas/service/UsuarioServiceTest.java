@@ -1,7 +1,5 @@
 package com.lewandowski.minhasfinancas.service;
 
-import static org.junit.Assert.assertThat;
-
 import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
