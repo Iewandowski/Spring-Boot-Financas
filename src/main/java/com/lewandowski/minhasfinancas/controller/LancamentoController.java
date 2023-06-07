@@ -25,18 +25,15 @@ import com.lewandowski.minhasfinancas.service.LancamentoService;
 import com.lewandowski.minhasfinancas.service.UsuarioService;
 
 import javassist.bytecode.stackmap.BasicBlock.Catch;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/lancamentos")
+@RequiredArgsConstructor
 public class LancamentoController {
     
-    private LancamentoService lancamento;
-    private UsuarioService user;
-
-    public LancamentoController(LancamentoService lancamento, UsuarioService user) {
-        this.lancamento = lancamento;
-        this.user = user;
-    }
+    private final LancamentoService lancamento;
+    private final UsuarioService user;
 
     @PostMapping
     public ResponseEntity salvar (@RequestBody LancamentoDTO dto) {
