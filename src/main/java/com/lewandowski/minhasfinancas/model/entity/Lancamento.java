@@ -17,14 +17,17 @@ import javax.persistence.Table;
 import com.lewandowski.minhasfinancas.model.enums.StatusLancamento;
 import com.lewandowski.minhasfinancas.model.enums.TipoLancamento;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Entity
 @Table(name = "lancamento", schema = "financas")
 @Data
-@Builder
+@AllArgsConstructor
 public class Lancamento {
+    public Lancamento() {
+    }
+
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
