@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.ExampleMatcher.StringMatcher;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.lewandowski.minhasfinancas.exception.RegraNegocioException;
@@ -16,6 +17,7 @@ import com.lewandowski.minhasfinancas.model.enums.StatusLancamento;
 import com.lewandowski.minhasfinancas.model.repository.LancamentoRepository;
 import com.lewandowski.minhasfinancas.service.LancamentoService;
 
+@Service
 public class LancamentoServiceImpl implements LancamentoService {
 
     private LancamentoRepository repository;
