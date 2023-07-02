@@ -20,6 +20,7 @@ import com.lewandowski.minhasfinancas.dto.LancamentoDTO;
 import com.lewandowski.minhasfinancas.exception.RegraNegocioException;
 import com.lewandowski.minhasfinancas.model.entity.Lancamento;
 import com.lewandowski.minhasfinancas.model.entity.Usuario;
+import com.lewandowski.minhasfinancas.model.enums.StatusLancamento;
 import com.lewandowski.minhasfinancas.model.enums.TipoLancamento;
 import com.lewandowski.minhasfinancas.service.LancamentoService;
 import com.lewandowski.minhasfinancas.service.UsuarioService;
@@ -29,18 +30,22 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/lancamentos")
-@RequiredArgsConstructor
 public class LancamentoController {
     
     private final LancamentoService lancamento;
     private final UsuarioService user;
 
+    public LancamentoController(LancamentoService lancamento, UsuarioService user) {
+        this.lancamento = lancamento;
+        this.user = user;
+    }
     @PostMapping
     public ResponseEntity salvar (@RequestBody LancamentoDTO dto) {
         try {
             Lancamento entidade = converter(dto);
             entidade = lancamento.salvar(entidade);
             return new ResponseEntity(entidade, HttpStatus.CREATED);
+            //return new ResponseEntity(entidade, HttpStatus.CREATED);
         }catch (RegraNegocioException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -79,14 +84,14 @@ public class LancamentoController {
             filtro.setDescricao(descricao);
             filtro.setMes(mes);
             filtro.setAno(ano);
-            filtro.setUsuario(null);
+            filtro.setIdUsuario(null);
 
             Optional<Usuario> usuario = user.obterPorId(idUsuario);
-            if (usuario.isPresent()) {
+            if (!usuario.isPresent()) {
                 return ResponseEntity.badRequest().body("Não foi possível realizar a consulta: Usuario não encontrado na base de dados");
             }
             else {
-                filtro.setUsuario(usuario.get());
+                filtro.setIdUsuario(usuario.get());
             }
 
             List<Lancamento> lancamentos = lancamento.buscar(filtro);
@@ -95,18 +100,23 @@ public class LancamentoController {
 
     private Lancamento converter(LancamentoDTO dto) {
         Lancamento lancamento = new Lancamento();
+        lancamento.setId(dto.getId());
         lancamento.setDescricao(dto.getDescricao());
         lancamento.setAno(dto.getAno());
         lancamento.setMes(dto.getMes());
         lancamento.setValor(dto.getValor());        
 
         Usuario usuario = user
-                        .obterPorId(dto.getUsuario())
+                        .obterPorId(dto.getIdUsuario())
                         .orElseThrow( () -> new RegraNegocioException("Usuario não encontrado para o Id informado."));
         
-        lancamento.setUsuario(usuario);
-        lancamento.setTipo(TipoLancamento.valueOf(dto.getTipo()));
-
+        lancamento.setIdUsuario(usuario);
+        if (dto.getTipo() != null) {
+            lancamento.setTipo(TipoLancamento.valueOf(dto.getTipo()));
+        }
+        if (dto.getStatus() != null) {
+            lancamento.setStatus(StatusLancamento.valueOf(dto.getStatus()));
+        }
         return lancamento;
     }
 }
