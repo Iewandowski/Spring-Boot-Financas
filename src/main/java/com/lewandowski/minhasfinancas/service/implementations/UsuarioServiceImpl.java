@@ -1,5 +1,6 @@
 package com.lewandowski.minhasfinancas.service.implementations;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -10,18 +11,22 @@ import org.springframework.stereotype.Service;
 import com.lewandowski.minhasfinancas.exception.ErroAutenticacaoException;
 import com.lewandowski.minhasfinancas.exception.RegraNegocioException;
 import com.lewandowski.minhasfinancas.model.entity.Usuario;
+import com.lewandowski.minhasfinancas.model.enums.TipoLancamento;
 import com.lewandowski.minhasfinancas.model.repository.UsuarioRepository;
+import com.lewandowski.minhasfinancas.service.LancamentoService;
 import com.lewandowski.minhasfinancas.service.UsuarioService;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
 
     @Autowired
-    private UsuarioRepository user;
+    private final UsuarioRepository user;
+    private final LancamentoService lancamento;
 
-    public UsuarioServiceImpl(UsuarioRepository user) {
+    public UsuarioServiceImpl(UsuarioRepository user, LancamentoService lancamento) {
         super();
         this.user = user;
+        this.lancamento = lancamento;
     }
 
     @Override
@@ -55,5 +60,4 @@ public class UsuarioServiceImpl implements UsuarioService {
     public Optional<Usuario> obterPorId(Long id) {
         return user.findById(id);
     }
-
 }
