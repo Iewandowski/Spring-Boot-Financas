@@ -18,12 +18,14 @@ import com.lewandowski.minhasfinancas.model.enums.StatusLancamento;
 import com.lewandowski.minhasfinancas.model.enums.TipoLancamento;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 @Entity
 @Table(name = "lancamento", schema = "financas")
 @Data
 @AllArgsConstructor
+@Builder
 public class Lancamento {
     public Lancamento() {
     }
